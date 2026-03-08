@@ -120,26 +120,13 @@
 
     <div class="main-layout">
         <div class="sidebar">
-            <button id="default-btn" class="chan-btn active"
-                onclick="smartSwitch('on', 'https://www.elahmad.com/tv/radiant.php?id=ontv1', 'ON TV', this)">ON TV 🔴</button>
-            
-            <button class="chan-btn"
-                onclick="smartSwitch('masr', 'https://www.elahmad.com/tv/live/mbc_masr.php', 'MBC مصر 1', this)">MBC مصر 1</button>
-            
-            <button class="chan-btn"
-                onclick="smartSwitch('masr2', 'https://www.elahmad.com/tv/live/mbc_masr2.php', 'MBC مصر 2', this)">MBC مصر 2</button>
-            
-            <button class="chan-btn"
-                onclick="smartSwitch('mbc1', 'https://www.elahmad.com/tv/live/mbc1.php', 'MBC 1', this)">MBC 1</button>
-            
-            <button class="chan-btn"
-                onclick="smartSwitch('mbc2', 'https://www.elahmad.com/tv/live/mbc2.php', 'MBC 2', this)">MBC 2</button>
-            
-            <button class="chan-btn"
-                onclick="smartSwitch('Qraan', 'https://www.elahmad.com/tv/watchtv.php?id=qoran_tv', 'السعودية مكة', this)">السعودية مكة</button>
-            
-            <button class="chan-btn"
-                onclick="smartSwitch('drama', 'https://www.elahmad.com/tv/live/mbc_drama.php', 'MBC Drama', this)">MBC Drama</button>
+            <button id="default-btn" class="chan-btn" onclick="smartSwitch('on', 'https://www.elahmad.com/tv/radiant.php?id=ontv1', 'ON TV', this)">ON TV 🔴</button>
+            <button class="chan-btn" onclick="smartSwitch('masr', 'https://www.elahmad.com/tv/live/mbc_masr.php', 'MBC مصر 1', this)">MBC مصر 1</button>
+            <button class="chan-btn" onclick="smartSwitch('masr2', 'https://www.elahmad.com/tv/live/mbc_masr2.php', 'MBC مصر 2', this)">MBC مصر 2</button>
+            <button class="chan-btn active" onclick="smartSwitch('mbc1', 'https://www.elahmad.com/tv/live/mbc1.php', 'MBC 1', this)">MBC 1</button>
+            <button class="chan-btn" onclick="smartSwitch('mbc2', 'https://www.elahmad.com/tv/live/mbc2.php', 'MBC 2', this)">MBC 2</button>
+            <button class="chan-btn" onclick="smartSwitch('Qraan', 'https://www.elahmad.com/tv/watchtv.php?id=qoran_tv', 'السعودية مكة', this)">السعودية مكة</button>
+            <button class="chan-btn" onclick="smartSwitch('drama', 'https://www.elahmad.com/tv/live/mbc_drama.php', 'MBC Drama', this)">MBC Drama</button>
         </div>
 
         <div class="player-area">
@@ -157,39 +144,33 @@
     </div>
 
     <script>
-        // رابط السيرفر بتاعك على Replit
-        const API_BASE = "https://briefsubtletechnology-hanaamaryamsale.replit.dev";
+        // تحديث الرابط للرابط الجديد اللي شغال حالياً
+        const API_BASE = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
 
         async function smartSwitch(endpoint, fallback, name, btn) {
             const frame = document.getElementById('main-frame');
             const status = document.getElementById('status');
             
-            // تحديث شكل الأزرار
             document.querySelectorAll('.chan-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
-            // تشغيل الرابط الاحتياطي فوراً لسرعة الاستجابة
+            // محاولة التشغيل بالرابط المباشر أولاً
             frame.src = fallback; 
-            status.innerText = `جاري محاولة الاتصال بـ ${name}...`;
+            status.innerText = `جاري الاتصال بـ ${name}...`;
 
             try {
-                // محاولة جلب رابط محدث من السيرفر
                 const res = await fetch(`${API_BASE}/get-channel/${endpoint}`);
                 const data = await res.json();
                 
-                if (data.link && data.link !== fallback) {
+                if (data.link) {
                     frame.src = data.link;
-                    status.innerText = `متصل بـ ${name} عبر السيرفر ✅`;
-                } else {
-                    status.innerText = `متصل بـ ${name} (بث مباشر) 📡`;
+                    status.innerText = `متصل بـ ${name} (سيرفر مفعل) ✅`;
                 }
             } catch (e) {
-                console.log("السيرفر بعيد، نستخدم البث المباشر الحالي.");
-                status.innerText = `متصل بـ ${name} (وضع احتياطي) ⚠️`;
+                status.innerText = `متصل بـ ${name} (بث مباشر) 📡`;
             }
         }
 
-        // تشغيل أول قناة عند فتح الموقع
         window.onload = () => document.getElementById('default-btn').click();
     </script>
 </body>
