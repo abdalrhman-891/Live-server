@@ -173,28 +173,25 @@
     </div>
 
     <script>
-        const API_BASE = "https://briefsubtletechnology-hanaamaryamsale.replit.dev";
+ // اتأكد إن الرابط ده هو اللي شغال معاك في Replit وبالظبط كدة
+const API_BASE = "https://briefsubtletechnology-hanaamaryamsale.replit.dev";
 
-        async function smartSwitch(endpoint, fallback, name, btn) {
-            const frame = document.getElementById('main-frame');
-            const status = document.getElementById('status');
+async function smartSwitch(endpoint, fallback, name, btn) {
+    const frame = document.getElementById('main-frame');
+    
+    // الحل عشان تهرب من حماية GitHub: استخدم الـ fallback كبداية
+    frame.src = fallback; 
 
-            document.querySelectorAll('.chan-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            frame.src = fallback; // تشغيل فوري للرابط الـ Embed
-            status.innerText = `جاري تشغيل ${name}...`;
-
-            try {
-                const res = await fetch(`${API_BASE}/get-channel/${endpoint}`);
-                const data = await res.json();
-                // لو السيرفر لقى تحديث للرابط بيغيره فوراً
-                if (data.link && data.link !== fallback) frame.src = data.link;
-                status.innerText = `متصل بـ ${name} ✅`;
-            } catch (e) {
-                status.innerText = `متصل بـ ${name} (وضع احتياطي) ⚠️`;
-            }
+    try {
+        const res = await fetch(`${API_BASE}/get-channel/${endpoint}`);
+        const data = await res.json();
+        if (data.link) {
+            frame.src = data.link;
         }
+    } catch (e) {
+        console.log("السيرفر مش بيرد، شغالين بالرابط الاحتياطي");
+    }
+}
 
         // تشغيل القناة الأولى تلقائياً
         window.onload = () => document.getElementById('default-btn').click();
@@ -203,3 +200,4 @@
 
 
 </html>
+
