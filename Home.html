@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac Group</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="bar">
+    <div class="Panner">
+      <h1 class="Panner_Text">Mac Group</h1>
+    </div>
+
+    <div class="search_container">
+      <form action="" style="flex: 1;">
+        <input type="text" placeholder="Search Product" required>
+      </form>
+      <div class="orders_container">
+        <a href="#">Orders</a>  <h1>سماعة بلوتوث</h1>
+  <button onclick="buyNow('سماعة بلوتوث')">شراء الآن</button>
+
+  <script>
+    function buyNow(productName) {
+      const phone = "01028925579"; // ← غيّر الرقم لرقم البائع (دون +)
+      const message = `مرحبًا، أرغب في شراء المنتج: ${productName}`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
+    }
+  </script>
+      </div>
+    </div>
+
+    
+
+</body>
+</html>
