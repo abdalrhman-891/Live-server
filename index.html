@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHAHID PRO | Embed Edition</title>
+    <title>SHAHID PRO | النسخة المستقرة</title>
     <style>
         :root {
             --bg: #050505;
@@ -39,7 +38,6 @@
             overflow: hidden;
         }
 
-        /* القائمة الجانبية (Sidebar) */
         .sidebar {
             width: 220px;
             display: flex;
@@ -74,7 +72,6 @@
             color: #000;
         }
 
-        /* منطقة المشغل */
         .player-area {
             flex: 1;
             display: flex;
@@ -84,7 +81,7 @@
 
         .screen-box {
             position: relative;
-            padding-bottom: 42%;
+            padding-bottom: 56.25%; /* نسبة 16:9 */
             height: 0;
             background: #000;
             border-radius: 15px;
@@ -109,24 +106,12 @@
         }
 
         @media (max-width: 800px) {
-            .main-layout {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                height: 70px;
-                overflow-x: auto;
-            }
-
-            .screen-box {
-                padding-bottom: 56.25%;
-            }
+            .main-layout { flex-direction: column; }
+            .sidebar { width: 100%; flex-direction: row; height: 80px; overflow-x: auto; }
+            .screen-box { padding-bottom: 56.25%; }
         }
     </style>
 </head>
-
 <body>
 
     <header>
@@ -136,68 +121,76 @@
     <div class="main-layout">
         <div class="sidebar">
             <button id="default-btn" class="chan-btn active"
-                onclick="smartSwitch('on', 'https://www.elahmad.com/tv/radiant.php?id=ontv1', 'ON TV', this)">ON TV
-                🔴</button>
+                onclick="smartSwitch('on', 'https://www.elahmad.com/tv/radiant.php?id=ontv1', 'ON TV', this)">ON TV 🔴</button>
+            
             <button class="chan-btn"
-                onclick="smartSwitch('masr', 'https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_masr', 'MBC مصر 1', this)">MBC
-                مصر 1</button>
+                onclick="smartSwitch('masr', 'https://www.elahmad.com/tv/live/mbc_masr.php', 'MBC مصر 1', this)">MBC مصر 1</button>
+            
             <button class="chan-btn"
-                onclick="smartSwitch('masr2', 'https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_masr2', 'MBC مصر 2', this)">MBC
-                مصر 2</button>
+                onclick="smartSwitch('masr2', 'https://www.elahmad.com/tv/live/mbc_masr2.php', 'MBC مصر 2', this)">MBC مصر 2</button>
+            
             <button class="chan-btn"
-                onclick="smartSwitch('mbc1', 'https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc1', 'MBC 1', this)">MBC
-                1</button>
+                onclick="smartSwitch('mbc1', 'https://www.elahmad.com/tv/live/mbc1.php', 'MBC 1', this)">MBC 1</button>
+            
             <button class="chan-btn"
-                onclick="smartSwitch('mbc2', 'https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc2', 'MBC 2', this)">MBC
-                2</button>
+                onclick="smartSwitch('mbc2', 'https://www.elahmad.com/tv/live/mbc2.php', 'MBC 2', this)">MBC 2</button>
+            
             <button class="chan-btn"
-                onclick="smartSwitch('Qraan', 'https://www.elahmad.com/tv/watchtv.php?id=qoran_tv', 'qoran_tv', this)">السوعدية
-                مكة</button>
+                onclick="smartSwitch('Qraan', 'https://www.elahmad.com/tv/watchtv.php?id=qoran_tv', 'السعودية مكة', this)">السعودية مكة</button>
+            
             <button class="chan-btn"
-                onclick="smartSwitch('drama', 'https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_drama', 'MBC Drama', this)">MBC
-                Drama</button>
+                onclick="smartSwitch('drama', 'https://www.elahmad.com/tv/live/mbc_drama.php', 'MBC Drama', this)">MBC Drama</button>
         </div>
 
         <div class="player-area">
             <div class="screen-box">
                 <iframe id="main-frame" 
-        src="about:blank" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
-        allowfullscreen 
-        scrolling="no">
-</iframe>
+                        src="about:blank" 
+                        frameborder="0" 
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
+                        allowfullscreen 
+                        scrolling="no">
+                </iframe>
             </div>
             <div id="status" class="status">جاهز للبث المباشر...</div>
         </div>
     </div>
 
     <script>
- // اتأكد إن الرابط ده هو اللي شغال معاك في Replit وبالظبط كدة
-const API_BASE = "https://briefsubtletechnology-hanaamaryamsale.replit.dev";
+        // رابط السيرفر بتاعك على Replit
+        const API_BASE = "https://briefsubtletechnology-hanaamaryamsale.replit.dev";
 
-async function smartSwitch(endpoint, fallback, name, btn) {
-    const frame = document.getElementById('main-frame');
-    
-    // الحل عشان تهرب من حماية GitHub: استخدم الـ fallback كبداية
-    frame.src = fallback; 
+        async function smartSwitch(endpoint, fallback, name, btn) {
+            const frame = document.getElementById('main-frame');
+            const status = document.getElementById('status');
+            
+            // تحديث شكل الأزرار
+            document.querySelectorAll('.chan-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // تشغيل الرابط الاحتياطي فوراً لسرعة الاستجابة
+            frame.src = fallback; 
+            status.innerText = `جاري محاولة الاتصال بـ ${name}...`;
 
-    try {
-        const res = await fetch(`${API_BASE}/get-channel/${endpoint}`);
-        const data = await res.json();
-        if (data.link) {
-            frame.src = data.link;
+            try {
+                // محاولة جلب رابط محدث من السيرفر
+                const res = await fetch(`${API_BASE}/get-channel/${endpoint}`);
+                const data = await res.json();
+                
+                if (data.link && data.link !== fallback) {
+                    frame.src = data.link;
+                    status.innerText = `متصل بـ ${name} عبر السيرفر ✅`;
+                } else {
+                    status.innerText = `متصل بـ ${name} (بث مباشر) 📡`;
+                }
+            } catch (e) {
+                console.log("السيرفر بعيد، نستخدم البث المباشر الحالي.");
+                status.innerText = `متصل بـ ${name} (وضع احتياطي) ⚠️`;
+            }
         }
-    } catch (e) {
-        console.log("السيرفر مش بيرد، شغالين بالرابط الاحتياطي");
-    }
-}
 
-        // تشغيل القناة الأولى تلقائياً
+        // تشغيل أول قناة عند فتح الموقع
         window.onload = () => document.getElementById('default-btn').click();
     </script>
 </body>
-
-
 </html>
-
