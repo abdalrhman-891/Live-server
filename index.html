@@ -3,46 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="referrer" content="no-referrer">
-    <title>SHAHID PRO MAX | FIXED</title>
+    <title>SHAHID PRO MAX | النسخة المستقرة</title>
     <style>
         body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 20px; max-width: 900px; margin: auto; }
-        .card { background: #111; border: 2px solid #333; padding: 30px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 18px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
+        .card { background: #111; border: 2px solid #222; padding: 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; }
         .card:hover { border-color: #d4af37; transform: scale(1.05); background: #1a1a1a; }
-        .status { margin-top: 30px; color: #888; }
+        #status { color: #888; margin-top: 20px; font-size: 14px; }
     </style>
 </head>
 <body>
-    <h1>شاهد برو ماكس 📺</h1>
-    <p>اضغط على القناة وسيتم فتح البث المباشر فوراً</p>
+    <h1>SHAHID PRO MAX 📺</h1>
+    <p>إذا ظهرت شاشة سوداء، اضغط على القناة لفتحها في نافذة آمنة</p>
     
     <div class="grid">
-        <div class="card" onclick="openLive('mbc1')">MBC 1</div>
-        <div class="card" onclick="openLive('masr')">MBC مصر</div>
-        <div class="card" onclick="openLive('mbc2')">MBC 2</div>
-        <div class="card" onclick="openLive('drama')">MBC دراما</div>
+        <div class="card" onclick="forcePlay('mbc1')">MBC 1</div>
+        <div class="card" onclick="forcePlay('masr')">MBC مصر</div>
+        <div class="card" onclick="forcePlay('mbc2')">MBC 2</div>
+        <div class="card" onclick="forcePlay('drama')">MBC دراما</div>
     </div>
 
-    <p id="msg" class="status">جاهز للبث المباشر...</p>
+    <p id="status">جاهز للبث...</p>
 
     <script>
         const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
 
-        async function openLive(id) {
-            const msg = document.getElementById('msg');
-            msg.innerText = "🔄 جاري جلب البث المباشر...";
+        async function forcePlay(id) {
+            const status = document.getElementById('status');
+            status.innerText = "🔄 جاري تخطي حماية GitHub...";
             
             try {
                 const r = await fetch(`${API}/get-channel/${id}`);
                 const d = await r.json();
                 
                 if (d.link) {
-                    msg.innerText = "✅ تم الاتصال!";
-                    // السر هنا: فتح نافذة "مشغل" مستقلة تماماً لتجنب حظر جيت هاب
+                    // السر هنا: بنفتح نافذة "مشغل" مستقلة
+                    // دي الطريقة اللي المتصفح بيعتبرها "أمان" زي الـ Live Server
                     window.open(d.link, 'ShahidPlayer', 'width=1000,height=700,status=no,toolbar=no,menubar=no');
+                    status.innerText = "✅ تم فتح القناة في نافذة مستقلة";
                 }
             } catch (e) {
-                msg.innerText = "❌ السيرفر لا يستجيب. تأكد من تشغيل Replit.";
+                status.innerText = "❌ السيرفر لا يستجيب، تأكد من تشغيل Replit.";
             }
         }
     </script>
