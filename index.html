@@ -5,49 +5,44 @@
     <meta name="referrer" content="no-referrer">
     <title>SHAHID PRO MAX | FIXED</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; }
-        .grid { display: flex; justify-content: center; gap: 15px; margin-top: 50px; }
-        .btn { background: #111; color: #d4af37; border: 2px solid #d4af37; padding: 20px; cursor: pointer; border-radius: 10px; font-weight: bold; width: 120px; }
-        .btn:hover { background: #d4af37; color: #000; }
-        #status { color: #555; margin-top: 20px; }
+        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 20px; max-width: 900px; margin: auto; }
+        .card { background: #111; border: 2px solid #333; padding: 30px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 18px; }
+        .card:hover { border-color: #d4af37; transform: scale(1.05); background: #1a1a1a; }
+        .status { margin-top: 30px; color: #888; }
     </style>
 </head>
 <body>
-    <h1>SHAHID PRO MAX 📺</h1>
+    <h1>شاهد برو ماكس 📺</h1>
+    <p>اضغط على القناة وسيتم فتح البث المباشر فوراً</p>
+    
     <div class="grid">
-        <button class="btn" onclick="bypassPlay('mbc1')">MBC 1</button>
-        <button class="btn" onclick="bypassPlay('masr')">MBC مصر</button>
-        <button class="btn" onclick="bypassPlay('mbc2')">MBC 2</button>
+        <div class="card" onclick="openLive('mbc1')">MBC 1</div>
+        <div class="card" onclick="openLive('masr')">MBC مصر</div>
+        <div class="card" onclick="openLive('mbc2')">MBC 2</div>
+        <div class="card" onclick="openLive('drama')">MBC دراما</div>
     </div>
-    <p id="status">اضغط على القناة للبدء</p>
+
+    <p id="msg" class="status">جاهز للبث المباشر...</p>
 
     <script>
         const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
 
-        async function bypassPlay(id) {
-            const status = document.getElementById('status');
-            status.innerText = "🔄 جاري تخطي الحماية...";
+        async function openLive(id) {
+            const msg = document.getElementById('msg');
+            msg.innerText = "🔄 جاري جلب البث المباشر...";
             
             try {
                 const r = await fetch(`${API}/get-channel/${id}`);
                 const d = await r.json();
                 
                 if (d.link) {
-                    // السر هنا: بنفتح نافذة "منبثقة" مستقلة
-                    // دي الطريقة الوحيدة اللي بتمنع ظهور Error 204 على GitHub
-                    const win = window.open('', 'ShahidPlayer', 'width=1000,height=700,status=no,toolbar=no,menubar=no');
-                    win.document.write(`
-                        <html>
-                        <head><title>تشغيل البث...</title></head>
-                        <body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;">
-                            <iframe src="${d.link}" style="width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media;"></iframe>
-                        </body>
-                        </html>
-                    `);
-                    status.innerText = "✅ تم تشغيل البث في نافذة منفصلة";
+                    msg.innerText = "✅ تم الاتصال!";
+                    // السر هنا: فتح نافذة "مشغل" مستقلة تماماً لتجنب حظر جيت هاب
+                    window.open(d.link, 'ShahidPlayer', 'width=1000,height=700,status=no,toolbar=no,menubar=no');
                 }
             } catch (e) {
-                status.innerText = "❌ السيرفر لا يستجيب، تأكد من تشغيل Replit.";
+                msg.innerText = "❌ السيرفر لا يستجيب. تأكد من تشغيل Replit.";
             }
         }
     </script>
