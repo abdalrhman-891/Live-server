@@ -2,45 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>SHAHID VIP | PRO</title>
+    <title>SHAHID PRO MAX</title>
     <style>
-        body { background: #080808; color: #d4af37; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden; }
-        .app { display: flex; height: 100vh; }
-        .side { width: 180px; background: #000; padding: 20px; border-left: 2px solid #d4af37; display: flex; flex-direction: column; gap: 10px; }
-        .btn { background: #111; color: #d4af37; border: 1px solid #333; padding: 12px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.3s; }
-        .btn:hover { border-color: #d4af37; background: #1a1a1a; }
-        .view { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #111 0%, #000 100%); }
-        iframe { width: 90%; height: 80%; border: 3px solid #1a1a1a; border-radius: 10px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 100px; }
+        .btn { background: #111; color: #d4af37; border: 2px solid #d4af37; padding: 20px 40px; cursor: pointer; border-radius: 10px; font-weight: bold; font-size: 18px; margin: 10px; }
+        .btn:hover { background: #d4af37; color: #000; }
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="side">
-            <h3 style="text-align:center">القنوات</h3>
-            <button class="btn" onclick="load('mbc1')">MBC 1</button>
-            <button class="btn" onclick="load('masr')">MBC مصر</button>
-            <button class="btn" onclick="load('mbc2')">MBC 2</button>
-            <button class="btn" onclick="load('drama')">MBC دراما</button>
-        </div>
-        <div class="view">
-            <iframe id="player" src="about:blank" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
-            <p id="info">اختر قناة للاستمتاع بالمشاهدة</p>
-        </div>
-    </div>
+    <h1>شاهد برو ماكس 📺</h1>
+    <p>اضغط على القناة لفتح البث المباشر في صفحة جديدة</p>
+    
+    <button class="btn" onclick="openLive('mbc1')">MBC 1</button>
+    <button class="btn" onclick="openLive('masr')">MBC مصر</button>
+    <button class="btn" onclick="openLive('mbc2')">MBC 2</button>
+    
+    <p id="msg"></p>
+
     <script>
-        const SERVER = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
-        async function load(id) {
-            const p = document.getElementById('player');
-            const m = document.getElementById('info');
-            m.innerText = "🔄 جاري تحميل البث...";
-            p.src = "about:blank";
+        const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
+
+        async function openLive(id) {
+            const msg = document.getElementById('msg');
+            msg.innerText = "🔄 جاري جلب الرابط...";
             try {
-                const r = await fetch(`${SERVER}/get-channel/${id}`);
-                const d = await r.json();
-                p.src = d.link; // السيرفر بيبعت الرابط والموقع بيفتحه
-                m.innerText = "✅ متصل";
+                const res = await fetch(`${API}/get-channel/${id}`);
+                const data = await res.json();
+                if (data.link) {
+                    msg.innerText = "✅ جاري الفتح...";
+                    // هيفتح القناة في صفحة جديدة وكأنك داخل من موقع الأحمد
+                    window.open(data.link, '_blank');
+                }
             } catch (e) {
-                m.innerText = "❌ السيرفر لا يستجيب";
+                msg.innerText = "❌ السيرفر مش شغال. اتأكد إنك دوست Run في Replit.";
             }
         }
     </script>
