@@ -2,36 +2,35 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>SHAHID PRO MAX 📺</title>
+    <title>SHAHID PRO MAX | النسخة المستقرة</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 80px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 20px; max-width: 900px; margin: auto; }
-        .card { background: #111; border: 2px solid #333; padding: 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 18px; }
+        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
+        .card { background: #111; border: 2px solid #222; padding: 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; }
         .card:hover { border-color: #d4af37; transform: scale(1.05); background: #1a1a1a; }
-        .status { margin-top: 30px; color: #888; font-size: 14px; }
+        .info { color: #888; font-size: 13px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <h1>شاهد برو ماكس 📺</h1>
-    <p>اضغط على القناة وسيفتح البث المباشر فوراً في نافذة آمنة</p>
+    <h1>SHAHID PRO MAX 📺</h1>
+    <p>اضغط على القناة وسيفتح البث فوراً في نافذة آمنة</p>
     
     <div class="grid">
-        <div class="card" onclick="play('mbc1')">MBC 1</div>
-        <div class="card" onclick="play('mbc_masr')">MBC مصر 1</div>
-        <div class="card" onclick="play('mbc_masr2')">MBC مصر 2</div>
-        <div class="card" onclick="play('mbc2')">MBC 2</div>
-        <div class="card" onclick="play('mbc_drama')">MBC دراما</div>
+        <div class="card" onclick="watch('mbc1')">MBC 1</div>
+        <div class="card" onclick="watch('mbc_masr')">MBC مصر</div>
+        <div class="card" onclick="watch('mbc2')">MBC 2</div>
+        <div class="card" onclick="watch('mbc_drama')">MBC دراما</div>
+        <div class="card" onclick="watch('mbc_action')">MBC أكشن</div>
+        <div class="card" onclick="watch('ontv1')">ON TV</div>
     </div>
 
-    <p id="msg" class="status">جاهز للبث المباشر...</p>
+    <p class="info">ملاحظة: تأكد من استخدام متصفح Chrome أو Edge لضمان عمل البث.</p>
 
     <script>
-        function play(id) {
-            document.getElementById('msg').innerText = "🔄 جاري فتح قناة " + id + "...";
-            // الرابط ده هو اللي موقع الأحمد بيسمح بيه للمتصفحات حالياً
-            const liveUrl = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
-            // بنفتح في نافذة جديدة عشان نتخطى "السواد" وحماية الـ Iframe
-            window.open(liveUrl, '_blank', 'width=800,height=600');
+        function watch(id) {
+            const url = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+            // السر هنا: فتح نافذة مستقلة لتخطي حماية الـ Iframe والسواد
+            window.open(url, 'ShahidPlayer', 'width=900,height=600,menubar=no,status=no,toolbar=no');
         }
     </script>
 </body>
