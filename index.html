@@ -4,38 +4,35 @@
     <meta charset="UTF-8">
     <title>SHAHID PRO MAX</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 100px; }
-        .btn { background: #111; color: #d4af37; border: 2px solid #d4af37; padding: 20px 40px; cursor: pointer; border-radius: 10px; font-weight: bold; font-size: 18px; margin: 10px; }
-        .btn:hover { background: #d4af37; color: #000; }
+        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 80px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 20px; max-width: 900px; margin: auto; }
+        .card { background: #111; border: 2px solid #333; padding: 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 18px; }
+        .card:hover { border-color: #d4af37; transform: scale(1.05); background: #1a1a1a; }
+        .status { margin-top: 30px; color: #888; font-size: 14px; }
     </style>
 </head>
 <body>
     <h1>شاهد برو ماكس 📺</h1>
-    <p>اضغط على القناة لفتح البث المباشر في صفحة جديدة</p>
+    <p>اضغط على القناة وسيفتح البث المباشر فوراً في نافذة آمنة</p>
     
-    <button class="btn" onclick="openLive('mbc1')">MBC 1</button>
-    <button class="btn" onclick="openLive('masr')">MBC مصر</button>
-    <button class="btn" onclick="openLive('mbc2')">MBC 2</button>
-    
-    <p id="msg"></p>
+    <div class="grid">
+        <div class="card" onclick="play('mbc1')">MBC 1</div>
+        <div class="card" onclick="play('mbc_masr')">MBC مصر 1</div>
+        <div class="card" onclick="play('mbc_masr2')">MBC مصر 2</div>
+        <div class="card" onclick="play('mbc2')">MBC 2</div>
+        <div class="card" onclick="play('mbc_drama')">MBC دراما</div>
+        <div class="card" onclick="play('mbc_action')">MBC أكشن</div>
+    </div>
+
+    <p id="msg" class="status">جاهز للبث المباشر...</p>
 
     <script>
-        const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
-
-        async function openLive(id) {
-            const msg = document.getElementById('msg');
-            msg.innerText = "🔄 جاري جلب الرابط...";
-            try {
-                const res = await fetch(`${API}/get-channel/${id}`);
-                const data = await res.json();
-                if (data.link) {
-                    msg.innerText = "✅ جاري الفتح...";
-                    // هيفتح القناة في صفحة جديدة وكأنك داخل من موقع الأحمد
-                    window.open(data.link, '_blank');
-                }
-            } catch (e) {
-                msg.innerText = "❌ السيرفر مش شغال. اتأكد إنك دوست Run في Replit.";
-            }
+        function play(id) {
+            document.getElementById('msg').innerText = "🔄 جاري فتح قناة " + id + "...";
+            // الرابط ده هو اللي موقع الأحمد بيسمح بيه للمتصفحات
+            const liveUrl = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+            // بنفتح في نافذة جديدة عشان نتخطى "السواد" وحماية الـ Iframe
+            window.open(liveUrl, '_blank', 'width=800,height=600');
         }
     </script>
 </body>
