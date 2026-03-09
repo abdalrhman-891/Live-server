@@ -3,47 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="referrer" content="no-referrer">
-    <title>SHAHID PRO MAX | النسخة المستقرة</title>
+    <title>SHAHID REMOTE | ريموت شاهد</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
-        .card { background: #111; border: 2px solid #222; padding: 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-        .card:hover { border-color: #d4af37; transform: scale(1.05); background: #1a1a1a; }
-        #status { color: #888; margin-top: 20px; font-size: 14px; }
+        body { background: #0a0a0a; color: #d4af37; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 50px; }
+        .remote-container { background: #1a1a1a; border: 3px solid #333; border-radius: 30px; width: 300px; margin: auto; padding: 20px; box-shadow: 0 0 20px rgba(212,175,55,0.2); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .btn { background: #222; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn:hover { background: #d4af37; color: #000; border-color: #fff; transform: scale(1.05); }
+        .status { color: #888; font-size: 12px; margin-top: 15px; }
     </style>
 </head>
 <body>
-    <h1>SHAHID PRO MAX 📺</h1>
-    <p>إذا ظهرت شاشة سوداء، اضغط على القناة لفتحها في نافذة آمنة</p>
-    
-    <div class="grid">
-        <div class="card" onclick="forcePlay('mbc1')">MBC 1</div>
-        <div class="card" onclick="forcePlay('masr')">MBC مصر</div>
-        <div class="card" onclick="forcePlay('mbc2')">MBC 2</div>
-        <div class="card" onclick="forcePlay('drama')">MBC دراما</div>
+    <div class="remote-container">
+        <h2>SHAHID PRO 📺</h2>
+        <div class="grid">
+            <button class="btn" onclick="launch('mbc1')">MBC 1</button>
+            <button class="btn" onclick="launch('masr')">MBC مصر</button>
+            <button class="btn" onclick="launch('mbc2')">MBC 2</button>
+            <button class="btn" onclick="launch('drama')">MBC دراما</button>
+            <button class="btn" onclick="launch('action')">MBC أكشن</button>
+            <button class="btn" onclick="launch('ontv1')">ON TV</button>
+        </div>
+        <p id="msg" class="status">اختر قناة للتشغيل</p>
     </div>
 
-    <p id="status">جاهز للبث...</p>
-
     <script>
+        // رابط السيرفر بتاعك في ريبلت اللي بيراقب الروابط
         const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
 
-        async function forcePlay(id) {
-            const status = document.getElementById('status');
-            status.innerText = "🔄 جاري تخطي حماية GitHub...";
+        async function launch(id) {
+            const msg = document.getElementById('msg');
+            msg.innerText = "🔄 جاري تخطي حماية GitHub...";
             
             try {
-                const r = await fetch(`${API}/get-channel/${id}`);
-                const d = await r.json();
+                const res = await fetch(`${API}/get-channel/${id}`);
+                const data = await res.json();
                 
-                if (d.link) {
-                    // السر هنا: بنفتح نافذة "مشغل" مستقلة
-                    // دي الطريقة اللي المتصفح بيعتبرها "أمان" زي الـ Live Server
-                    window.open(d.link, 'ShahidPlayer', 'width=1000,height=700,status=no,toolbar=no,menubar=no');
-                    status.innerText = "✅ تم فتح القناة في نافذة مستقلة";
+                if (data.link) {
+                    // هنا السر: بنفتح "نافذة بث" خارجية
+                    // دي الطريقة الوحيدة اللي بتخلي الكروم يفك التشفير بعيد عن GitHub
+                    window.open(data.link, 'TV_PLAYER', 'width=1000,height=650,status=no,toolbar=no,menubar=no');
+                    msg.innerText = "✅ تم فتح القناة بنجاح";
                 }
             } catch (e) {
-                status.innerText = "❌ السيرفر لا يستجيب، تأكد من تشغيل Replit.";
+                msg.innerText = "❌ السيرفر مش شغال، دوس Run في ريبلت.";
             }
         }
     </script>
