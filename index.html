@@ -28,10 +28,13 @@
 
     <script>
         function watch(id) {
-            const url = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
-            // السر هنا: فتح نافذة مستقلة لتخطي حماية الـ Iframe والسواد
-            window.open(url, 'ShahidPlayer', 'width=900,height=600,menubar=no,status=no,toolbar=no');
-        }
+    // الرابط ده هو المشغل المباشر اللي الأحمد بيسمح بيه
+    const directUrl = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+    
+    // الحركة دي بتفتح القناة في صفحة جديدة (Tab) عشان نتخطى حماية الـ Iframe
+    window.open(directUrl, '_blank');
+}
     </script>
 </body>
 </html>
+
