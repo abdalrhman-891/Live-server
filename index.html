@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>SHAHID PRO MAX</title>
+    <title>SHAHID PRO MAX 📺</title>
     <style>
         body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 80px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 20px; max-width: 900px; margin: auto; }
@@ -21,7 +21,6 @@
         <div class="card" onclick="play('mbc_masr2')">MBC مصر 2</div>
         <div class="card" onclick="play('mbc2')">MBC 2</div>
         <div class="card" onclick="play('mbc_drama')">MBC دراما</div>
-        <div class="card" onclick="play('mbc_action')">MBC أكشن</div>
     </div>
 
     <p id="msg" class="status">جاهز للبث المباشر...</p>
@@ -29,7 +28,7 @@
     <script>
         function play(id) {
             document.getElementById('msg').innerText = "🔄 جاري فتح قناة " + id + "...";
-            // الرابط ده هو اللي موقع الأحمد بيسمح بيه للمتصفحات
+            // الرابط ده هو اللي موقع الأحمد بيسمح بيه للمتصفحات حالياً
             const liveUrl = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
             // بنفتح في نافذة جديدة عشان نتخطى "السواد" وحماية الـ Iframe
             window.open(liveUrl, '_blank', 'width=800,height=600');
