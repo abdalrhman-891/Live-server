@@ -2,45 +2,45 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>SHAHID PRO MAX</title>
+    <title>SHAHID VIP | PRO</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; margin: 0; text-align: center; }
-        .container { display: flex; height: 100vh; }
-        .sidebar { width: 200px; background: #111; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
-        .btn { background: #222; color: #d4af37; border: 1px solid #d4af37; padding: 15px; cursor: pointer; font-weight: bold; border-radius: 5px; }
-        .btn:hover, .btn.active { background: #d4af37; color: #000; }
-        .main { flex: 1; padding: 20px; }
-        iframe { width: 100%; height: 80%; border: 2px solid #d4af37; border-radius: 15px; background: #000; }
+        body { background: #080808; color: #d4af37; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden; }
+        .app { display: flex; height: 100vh; }
+        .side { width: 180px; background: #000; padding: 20px; border-left: 2px solid #d4af37; display: flex; flex-direction: column; gap: 10px; }
+        .btn { background: #111; color: #d4af37; border: 1px solid #333; padding: 12px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+        .btn:hover { border-color: #d4af37; background: #1a1a1a; }
+        .view { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #111 0%, #000 100%); }
+        iframe { width: 90%; height: 80%; border: 3px solid #1a1a1a; border-radius: 10px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <button class="btn" onclick="load('mbc1', this)">MBC 1</button>
-            <button class="btn" onclick="load('mbc2', this)">MBC 2</button>
-            <button class="btn" onclick="load('masr', this)">MBC مصر</button>
-            <button class="btn" onclick="load('action', this)">MBC Action</button>
+    <div class="app">
+        <div class="side">
+            <h3 style="text-align:center">القنوات</h3>
+            <button class="btn" onclick="load('mbc1')">MBC 1</button>
+            <button class="btn" onclick="load('masr')">MBC مصر</button>
+            <button class="btn" onclick="load('mbc2')">MBC 2</button>
+            <button class="btn" onclick="load('drama')">MBC دراما</button>
         </div>
-        <div class="main">
-            <h2>SHAHID PRO | البث المباشر</h2>
+        <div class="view">
             <iframe id="player" src="about:blank" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
-            <p id="msg">اختر قناة للبدء...</p>
+            <p id="info">اختر قناة للاستمتاع بالمشاهدة</p>
         </div>
     </div>
     <script>
-        const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
-        async function load(id, btn) {
-            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('msg').innerText = "🔄 جاري جلب البث المباشر...";
+        const SERVER = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
+        async function load(id) {
+            const p = document.getElementById('player');
+            const m = document.getElementById('info');
+            m.innerText = "🔄 جاري تحميل البث...";
+            p.src = "about:blank";
             try {
-                const r = await fetch(`${API}/get-channel/${id}`);
+                const r = await fetch(`${SERVER}/get-channel/${id}`);
                 const d = await r.json();
-                // لو السيرفر جاب رابط m3u8 هنشغله فوراً
-                document.getElementById('player').src = d.link;
-                document.getElementById('msg').innerText = "✅ متصل الآن";
+                p.src = d.link; // السيرفر بيبعت الرابط والموقع بيفتحه
+                m.innerText = "✅ متصل";
             } catch (e) {
-                document.getElementById('msg').innerText = "❌ السيرفر لا يستجيب";
+                m.innerText = "❌ السيرفر لا يستجيب";
             }
         }
     </script>
