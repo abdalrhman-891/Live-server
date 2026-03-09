@@ -2,43 +2,38 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer">
-    <title>SHAHID PRO | النسخة النهائية</title>
+    <title>SHAHID PRO MAX</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; margin: 0; text-align: center; }
-        .sidebar { padding: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .btn { background: #111; color: #d4af37; border: 1px solid #d4af37; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
-        .player-container { width: 90%; max-width: 900px; margin: 20px auto; aspect-ratio: 16/9; border: 2px solid #222; border-radius: 10px; overflow: hidden; background: #000; }
-        iframe { width: 100%; height: 100%; border: none; }
+        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
+        .grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; }
+        .card { background: #111; border: 2px solid #d4af37; padding: 30px; border-radius: 15px; cursor: pointer; font-weight: bold; width: 150px; }
+        .card:hover { background: #d4af37; color: #000; }
+        .notice { color: #555; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <h1>SHAHID PRO 📺</h1>
-    <div class="sidebar">
-        <button class="btn" onclick="load('mbc1')">MBC 1</button>
-        <button class="btn" onclick="load('masr')">MBC مصر</button>
-        <button class="btn" onclick="load('mbc2')">MBC 2</button>
+    <h1>شاهد برو (نسخة جيت هاب)</h1>
+    <div class="grid">
+        <div class="card" onclick="forcePlay('mbc1')">MBC 1</div>
+        <div class="card" onclick="forcePlay('mbc_masr')">MBC مصر</div>
+        <div class="card" onclick="forcePlay('mbc2')">MBC 2</div>
     </div>
-
-    <div class="player-container">
-        <iframe id="player" src="about:blank" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
-    </div>
+    <p class="notice">إذا لم يفتح البث، تأكد من السماح بالنوافذ المنبثقة (Pop-ups) في المتصفح.</p>
 
     <script>
-        const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
-
-        async function load(id) {
-            const frame = document.getElementById('player');
-            try {
-                const r = await fetch(`${API}/get-channel/${id}`);
-                const d = await r.json();
-                if (d.link) {
-                    // بنعمل ريفريش كامل للـ iframe عشان يمسح كلمة File not found
-                    frame.src = d.link;
-                }
-            } catch (e) {
-                alert("السيرفر واقف، اتأكد إن ريبلت شغال.");
-            }
+        function forcePlay(id) {
+            // الرابط ده هو اللي اشتغل معاك في الفيجوال ستوديو
+            const url = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+            
+            // بدلاً من iframe، هنفتح نافذة "بث" مستقلة لتخطي حماية جيت هاب
+            const win = window.open('', '_blank', 'width=900,height=600');
+            win.document.write(`
+                <html>
+                <body style="margin:0;background:#000;">
+                    <iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media;"></iframe>
+                </body>
+                </html>
+            `);
         }
     </script>
 </body>
