@@ -2,38 +2,53 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>SHAHID PRO MAX</title>
+    <meta name="referrer" content="no-referrer">
+    <title>SHAHID PRO MAX | FIXED</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
-        .grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; }
-        .card { background: #111; border: 2px solid #d4af37; padding: 30px; border-radius: 15px; cursor: pointer; font-weight: bold; width: 150px; }
-        .card:hover { background: #d4af37; color: #000; }
-        .notice { color: #555; font-size: 12px; margin-top: 20px; }
+        body { background: #000; color: #d4af37; font-family: sans-serif; text-align: center; }
+        .grid { display: flex; justify-content: center; gap: 15px; margin-top: 50px; }
+        .btn { background: #111; color: #d4af37; border: 2px solid #d4af37; padding: 20px; cursor: pointer; border-radius: 10px; font-weight: bold; width: 120px; }
+        .btn:hover { background: #d4af37; color: #000; }
+        #status { color: #555; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <h1>شاهد برو (نسخة جيت هاب)</h1>
+    <h1>SHAHID PRO MAX 📺</h1>
     <div class="grid">
-        <div class="card" onclick="forcePlay('mbc1')">MBC 1</div>
-        <div class="card" onclick="forcePlay('mbc_masr')">MBC مصر</div>
-        <div class="card" onclick="forcePlay('mbc2')">MBC 2</div>
+        <button class="btn" onclick="bypassPlay('mbc1')">MBC 1</button>
+        <button class="btn" onclick="bypassPlay('masr')">MBC مصر</button>
+        <button class="btn" onclick="bypassPlay('mbc2')">MBC 2</button>
     </div>
-    <p class="notice">إذا لم يفتح البث، تأكد من السماح بالنوافذ المنبثقة (Pop-ups) في المتصفح.</p>
+    <p id="status">اضغط على القناة للبدء</p>
 
     <script>
-        function forcePlay(id) {
-            // الرابط ده هو اللي اشتغل معاك في الفيجوال ستوديو
-            const url = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+        const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
+
+        async function bypassPlay(id) {
+            const status = document.getElementById('status');
+            status.innerText = "🔄 جاري تخطي الحماية...";
             
-            // بدلاً من iframe، هنفتح نافذة "بث" مستقلة لتخطي حماية جيت هاب
-            const win = window.open('', '_blank', 'width=900,height=600');
-            win.document.write(`
-                <html>
-                <body style="margin:0;background:#000;">
-                    <iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media;"></iframe>
-                </body>
-                </html>
-            `);
+            try {
+                const r = await fetch(`${API}/get-channel/${id}`);
+                const d = await r.json();
+                
+                if (d.link) {
+                    // السر هنا: بنفتح نافذة "منبثقة" مستقلة
+                    // دي الطريقة الوحيدة اللي بتمنع ظهور Error 204 على GitHub
+                    const win = window.open('', 'ShahidPlayer', 'width=1000,height=700,status=no,toolbar=no,menubar=no');
+                    win.document.write(`
+                        <html>
+                        <head><title>تشغيل البث...</title></head>
+                        <body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;">
+                            <iframe src="${d.link}" style="width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media;"></iframe>
+                        </body>
+                        </html>
+                    `);
+                    status.innerText = "✅ تم تشغيل البث في نافذة منفصلة";
+                }
+            } catch (e) {
+                status.innerText = "❌ السيرفر لا يستجيب، تأكد من تشغيل Replit.";
+            }
         }
     </script>
 </body>
