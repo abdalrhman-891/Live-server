@@ -1,27 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-    <title>SmartCast Player</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCast | البث المباشر</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        video { width: 80%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,0,0.2); }
+        :root {
+            --bg-color: #0f172a;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+        }
+        h1 { font-weight: 300; margin-bottom: 20px; color: var(--accent-color); }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        video {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+        .status { margin-top: 15px; font-size: 0.9rem; opacity: 0.7; }
     </style>
 </head>
 <body>
-    <video id="video" controls></video>
-    <script>
-        var video = document.getElementById('video');
-        // هنا حط الرابط اللي لقيته في ملف all_mbc_found.txt
-        var videoSrc = 'رابط_القناة_هنا.m3u8'; 
 
-        if (Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc;
+<div class="container">
+    <h1>SmartCast Live</h1>
+    <div class="video-wrapper">
+        <video id="video" controls></video>
+    </div>
+    <div class="status" id="update-time">جاري تحديث الرابط...</div>
+</div>
+
+<script>
+    const video = document.getElementById('video');
+    const statusText = document.getElementById('update-time');
+
+    async function initPlayer() {
+        try {
+            // 1. قراءة ملف الـ JSON اللي بايثون بيحدثه أوتوماتيك
+            // ملاحظة: تأكد أن الملف مرفوع في نفس مسار صفحة الـ HTML
+            const response = await fetch('link.json');
+            const data = await response.json();
+            
+            const streamUrl = data.mbc_masr_2;
+            statusText.innerText = "آخر تحديث: " + data.last_updated;
+
+            // 2. تشغيل الرابط باستخدام HLS.js
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } 
+            // للمتصفحات اللي بتدعم HLS طبيعي (زي Safari)
+            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            }
+        } catch (error) {
+            console.error("Error loading stream:", error);
+            statusText.innerText = "خطأ في تحميل البث، يرجى المحاولة لاحقاً.";
         }
-    </script>
+    }
+
+    initPlayer();
+</script>
+
 </body>
 </html>
