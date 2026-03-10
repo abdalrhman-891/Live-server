@@ -1,0 +1,32 @@
+name: Update Live Stream Link
+
+on:
+  schedule:
+    - cron: '0 * * * *' # هيشتغل أوتوماتيك كل ساعة بالظبط
+  workflow_dispatch: # بيخليك تقدر تشغله يدوياً من جيت هاب لو حبيت
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Update Script
+        run: python main.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add link.json
+          git commit -m "Auto-update stream link [$(date)]" || exit 0
+          git push
