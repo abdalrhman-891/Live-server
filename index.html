@@ -3,90 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer">
-    <title>شاهد برو | البث الذكي V2</title>
+    <title>شاهد برو | V4 الذكي</title>
     <style>
-        body { background-color: #0b0b0b; color: #e5e5e5; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        header { background: linear-gradient(145deg, #1a1a1a, #000); border-bottom: 2px solid #d4af37; padding: 20px; text-align: center; }
-        header h1 { color: #d4af37; margin: 0; font-size: 28px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .main-container { max-width: 1000px; margin: 30px auto; padding: 0 15px; }
-        .nav-channels { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        body { background-color: #0b0b0b; color: #e5e5e5; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 50px; }
+        .remote-container { background: #1a1a1a; padding: 30px; border-radius: 20px; border: 2px solid #d4af37; display: inline-block; box-shadow: 0 0 20px rgba(212,175,55,0.2); }
+        h1 { color: #d4af37; margin-bottom: 25px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .btn { 
-            background: #1a1a1a; color: #d4af37; border: 1px solid #d4af37; 
-            padding: 12px 20px; cursor: pointer; border-radius: 8px; font-weight: bold; transition: 0.3s; font-size: 13px;
+            background: #222; color: #d4af37; border: 1px solid #d4af37; 
+            padding: 15px 25px; cursor: pointer; border-radius: 12px; font-weight: bold; transition: 0.3s;
         }
-        .btn.active { background: #d4af37; color: #000; box-shadow: 0 0 10px #d4af37; }
-        .player-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background-color: #000; border: 3px solid #d4af37; border-radius: 12px; }
-        .player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .content-info { background: #1a1a1a; margin-top: 20px; padding: 20px; border-radius: 12px; border-right: 5px solid #d4af37; }
-        .status-bar { font-size: 11px; color: #666; margin-top: 10px; }
+        .btn:hover { background: #d4af37; color: #000; transform: translateY(-3px); }
+        .note { margin-top: 20px; font-size: 12px; color: #666; }
     </style>
 </head>
 <body>
 
-<header><h1>SHAHID PRO MAX</h1></header>
-
-<div class="main-container">
-    <div class="nav-channels">
-        <button class="btn active" onclick="smartSwitch('get-on', 'https://www.elahmad.com/tv/on-live-egypt.php', 'ON TV', this)">ON TV</button>
-        <button class="btn" onclick="smartSwitch('get-masr', 'https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_masr', 'MBC مصر 1', this)">MBC مصر 1</button>
-        <button class="btn" onclick="smartSwitch('get-masr2', 'https://www.elahmad.com/tv/radiant.php?id=mbc_masr2', 'MBC مصر 2', this)">MBC مصر 2</button>
-        <button class="btn" onclick="smartSwitch('get-mbc1', 'https://www.elahmad.com/tv/radiant.php?id=mbc1', 'MBC 1', this)">MBC 1</button>
+<div class="remote-container">
+    <h1>SHAHID PRO MAX 📺</h1>
+    <div class="btn-grid">
+        <button class="btn" onclick="launch('on')">ON TV</button>
+        <button class="btn" onclick="launch('mbc_masr')">MBC مصر 1</button>
+        <button class="btn" onclick="launch('mbc_masr2')">MBC مصر 2</button>
+        <button class="btn" onclick="launch('mbc2')">MBC 2</button>
     </div>
-
-    <div class="player-wrapper">
-        <iframe id="main-player" 
-            src="about:blank" 
-            frameborder="0" 
-            scrolling="no" 
-            allow="autoplay; encrypted-media; fullscreen" 
-            allowfullscreen>
-        </iframe>
-    </div>
-    
-    <div id="sync-msg" class="status-bar">جاهز للبث...</div>
-
-    <div class="content-info">
-        <h2 id="chan-title" style="color:#d4af37; margin:0;">قناة ON TV</h2>
-        <p style="font-size:14px; color:#aaa;">بث مباشر فائق الجودة - لو الصورة سودة اعمل تحديث للصفحة.</p>
-    </div>
+    <p class="note">لو القناة مظهرتش، تأكد من سماح المتصفح بالـ Pop-ups</p>
 </div>
 
 <script>
-    const apiBase = "https://briefsubtletechnology-hanaamaryamsale.replit.dev"; 
+    function launch(id) {
+        // بنحدد رابط القناة بناءً على النوع
+        let url = "";
+        if(id === 'on') {
+            url = "https://www.elahmad.com/tv/on-live-egypt.php";
+        } else {
+            // روابط MBC مصر 2 وكل الـ MBC بتشتغل 100% من هنا
+            url = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+        }
 
-    async function smartSwitch(endpoint, manualLink, title, btn) {
-        document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('chan-title').innerText = "قناة " + title;
-
-        const player = document.getElementById('main-player');
-        const msg = document.getElementById('sync-msg');
-
-        // تصفير المشغل قبل التحميل الجديد لمنع الأخطاء
-        player.src = "about:blank";
+        // السر هنا: بنفتح نافذة جديدة "Popup"
+        // دي بتخلي المتصفح يفك التشفير (DRM) كأنك فاتح الموقع الأصلي
+        const win = window.open(url, 'ShahidPlayer', 'width=1000,height=600,scrollbars=no,resizable=yes');
         
-        setTimeout(() => {
-            player.src = manualLink;
-            msg.innerText = "جاري الاتصال بالمصدر المباشر...";
-        }, 100);
-
-        try {
-            const response = await fetch(`${apiBase}/${endpoint}`);
-            const data = await response.json();
-            if (data.link && data.link !== manualLink) {
-                player.src = data.link;
-                msg.innerText = "تم مزامنة الرابط الذكي ✅";
-            }
-        } catch (e) {
-            msg.innerText = "الوضع اليدوي نشط ⚠️";
+        if (!win || win.closed || typeof win.closed == 'undefined') { 
+            alert('يا عبد الله، المتصفح حاجب الـ Pop-ups! وافق عليها عشان القناة تفتح.');
         }
     }
-
-    window.onload = () => {
-        const firstBtn = document.querySelector('.btn');
-        firstBtn.click();
-    };
 </script>
+
 </body>
 </html>
