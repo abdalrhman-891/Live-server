@@ -3,51 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="referrer" content="no-referrer">
-    <title>SHAHID REMOTE | ريموت شاهد</title>
+    <title>SHAHID PRO | الريموت السحري</title>
     <style>
-        body { background: #0a0a0a; color: #d4af37; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 50px; }
-        .remote-container { background: #1a1a1a; border: 3px solid #333; border-radius: 30px; width: 300px; margin: auto; padding: 20px; box-shadow: 0 0 20px rgba(212,175,55,0.2); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .btn { background: #222; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn:hover { background: #d4af37; color: #000; border-color: #fff; transform: scale(1.05); }
-        .status { color: #888; font-size: 12px; margin-top: 15px; }
+        body { background: #000; color: #d4af37; text-align: center; font-family: sans-serif; padding-top: 100px; }
+        .btn { background: #111; color: #d4af37; border: 2px solid #d4af37; padding: 20px 40px; 
+               cursor: pointer; border-radius: 15px; font-weight: bold; font-size: 20px; transition: 0.3s; }
+        .btn:hover { background: #d4af37; color: #000; transform: scale(1.1); }
     </style>
 </head>
 <body>
-    <div class="remote-container">
-        <h2>SHAHID PRO 📺</h2>
-        <div class="grid">
-            <button class="btn" onclick="launch('mbc1')">MBC 1</button>
-            <button class="btn" onclick="launch('masr')">MBC مصر</button>
-            <button class="btn" onclick="launch('mbc2')">MBC 2</button>
-            <button class="btn" onclick="launch('drama')">MBC دراما</button>
-            <button class="btn" onclick="launch('action')">MBC أكشن</button>
-            <button class="btn" onclick="launch('ontv1')">ON TV</button>
-        </div>
-        <p id="msg" class="status">اختر قناة للتشغيل</p>
+    <h1>الريموت السحري 📺</h1>
+    <p>لو طلع لك File not found، دوس على الزرار وهيفتح لك البث "بره" الحظر</p>
+    
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+        <button class="btn" onclick="go('mbc1')">MBC 1</button>
+        <button class="btn" onclick="go('mbc_masr')">MBC مصر</button>
+        <button class="btn" onclick="go('mbc2')">MBC 2</button>
     </div>
 
     <script>
-        // رابط السيرفر بتاعك في ريبلت اللي بيراقب الروابط
-        const API = "https://brief-subtle-technology--hanaamaryamsale.replit.app";
-
-        async function launch(id) {
-            const msg = document.getElementById('msg');
-            msg.innerText = "🔄 جاري تخطي حماية GitHub...";
+        function go(id) {
+            // هنا اللعبة: بنفتح الرابط في صفحة جديدة تماماً بعيد عن ريبلت وفيرسيل
+            const url = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
             
-            try {
-                const res = await fetch(`${API}/get-channel/${id}`);
-                const data = await res.json();
-                
-                if (data.link) {
-                    // هنا السر: بنفتح "نافذة بث" خارجية
-                    // دي الطريقة الوحيدة اللي بتخلي الكروم يفك التشفير بعيد عن GitHub
-                    window.open(data.link, 'TV_PLAYER', 'width=1000,height=650,status=no,toolbar=no,menubar=no');
-                    msg.innerText = "✅ تم فتح القناة بنجاح";
-                }
-            } catch (e) {
-                msg.innerText = "❌ السيرفر مش شغال، دوس Run في ريبلت.";
-            }
+            // "window.open" بتخلي المتصفح يفتح الرابط كأنك كاتبه بإيدك في شريط العنوان
+            // وده اللي كان بيشغلها معاك في الـ Live Server
+            window.open(url, '_blank', 'width=1000,height=600');
         }
     </script>
 </body>
