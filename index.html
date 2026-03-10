@@ -2,33 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer">
-    <title>SHAHID PRO | الريموت السحري</title>
+    <meta name="referrer" content="no-referrer"> <title>SHAHID PRO | الحل النهائي</title>
     <style>
-        body { background: #000; color: #d4af37; text-align: center; font-family: sans-serif; padding-top: 100px; }
-        .btn { background: #111; color: #d4af37; border: 2px solid #d4af37; padding: 20px 40px; 
-               cursor: pointer; border-radius: 15px; font-weight: bold; font-size: 20px; transition: 0.3s; }
-        .btn:hover { background: #d4af37; color: #000; transform: scale(1.1); }
+        body { background: #000; color: #d4af37; text-align: center; font-family: sans-serif; padding-top: 50px; }
+        .remote { background: #111; border: 2px solid #333; padding: 20px; border-radius: 20px; width: 300px; margin: auto; }
+        .btn { background: #222; color: #fff; border: 1px solid #d4af37; padding: 15px; width: 100%; 
+               margin-bottom: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #d4af37; color: #000; }
     </style>
 </head>
 <body>
-    <h1>الريموت السحري 📺</h1>
-    <p>لو طلع لك File not found، دوس على الزرار وهيفتح لك البث "بره" الحظر</p>
-    
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-        <button class="btn" onclick="go('mbc1')">MBC 1</button>
-        <button class="btn" onclick="go('mbc_masr')">MBC مصر</button>
-        <button class="btn" onclick="go('mbc2')">MBC 2</button>
+    <div class="remote">
+        <h2>ريموت كسر الحماية 📺</h2>
+        <button class="btn" onclick="bypass('mbc1')">تشغيل MBC 1</button>
+        <button class="btn" onclick="bypass('mbc_masr')">تشغيل MBC مصر</button>
+        <button class="btn" onclick="bypass('mbc2')">تشغيل MBC 2</button>
+        <p style="font-size: 10px; color: #555;">لو ظهر 204.. المتصفح محتاج تحديث</p>
     </div>
 
     <script>
-        function go(id) {
-            // هنا اللعبة: بنفتح الرابط في صفحة جديدة تماماً بعيد عن ريبلت وفيرسيل
-            const url = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+        function bypass(id) {
+            // الرابط اللي بيشغل القناة "بره" الموقع
+            const target = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
             
-            // "window.open" بتخلي المتصفح يفتح الرابط كأنك كاتبه بإيدك في شريط العنوان
-            // وده اللي كان بيشغلها معاك في الـ Live Server
-            window.open(url, '_blank', 'width=1000,height=600');
+            // هنا السر: بنفتح النافذة وبنمسح الـ "Referrer" تماماً
+            // كأنك فاتح التبويب ده "من الهوا" مش من فيرسيل
+            const win = window.open('', '_blank', 'width=1000,height=600');
+            win.opener = null; // قطع الصلة بموقعك عشان الأحمد ميعرفش أنت جاي منين
+            win.location.replace(target);
         }
     </script>
 </body>
