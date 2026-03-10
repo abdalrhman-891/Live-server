@@ -1,53 +1,26 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>SHAHID PRO MAX | V5</title>
+    <title>SmartCast Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { background: #000; color: #d4af37; text-align: center; font-family: 'Segoe UI', sans-serif; padding-top: 50px; }
-        .box { background: #111; border: 2px solid #d4af37; padding: 30px; border-radius: 20px; display: inline-block; }
-        .btn { 
-            background: linear-gradient(145deg, #d4af37, #b8962d); color: #000; 
-            border: none; padding: 15px 30px; margin: 10px; border-radius: 10px; 
-            font-weight: bold; cursor: pointer; font-size: 18px; width: 200px;
-        }
-        .btn:hover { transform: scale(1.05); background: #fff; }
+        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        video { width: 80%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,0,0.2); }
     </style>
 </head>
 <body>
-
-    <div class="box">
-        <h2>لوحة تحكم شاهد برو 📺</h2>
-        <p>اختر القناة للتشغيل المباشر</p>
-        
-        <button class="btn" onclick="openChannel('mbc_masr')">MBC مصر 1</button><br>
-        <button class="btn" onclick="openChannel('mbc_masr2')">MBC مصر 2</button><br>
-        <button class="btn" onclick="openChannel('on')">ON TV</button>
-    </div>
-
+    <video id="video" controls></video>
     <script>
-        function openChannel(id) {
-            let finalUrl = "";
-            
-            if (id === 'on') {
-                finalUrl = "https://www.elahmad.com/tv/on-live-egypt.php";
-            } else {
-                // ده الرابط اللي الكود بتاعهم بيستخدمه لفك التشفير تلقائياً
-                finalUrl = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
-            }
+        var video = document.getElementById('video');
+        // هنا حط الرابط اللي لقيته في ملف all_mbc_found.txt
+        var videoSrc = 'رابط_القناة_هنا.m3u8'; 
 
-            // بنفتح الرابط في نافذة جديدة عشان نتخطى حماية الـ Access Denied والـ Sandbox
-            const playWin = window.open('', '_blank', 'width=1000,height=600');
-            
-            // بنحقن كود يخلي الصفحة "نضيفة" من غير إعلانات الأحمد الجانبية
-            playWin.document.write(`
-                <html>
-                <head><title>جاري التشغيل...</title></head>
-                <body style="margin:0;background:#000;">
-                    <iframe src="${finalUrl}" width="100%" height="100%" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-                </body>
-                </html>
-            `);
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
         }
     </script>
 </body>
