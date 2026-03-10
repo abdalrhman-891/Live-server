@@ -2,34 +2,46 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer"> <title>SHAHID PRO | الحل النهائي</title>
+    <meta name="referrer" content="no-referrer">
+    <title>SHAHID PRO | التحديث الأخير</title>
     <style>
         body { background: #000; color: #d4af37; text-align: center; font-family: sans-serif; padding-top: 50px; }
-        .remote { background: #111; border: 2px solid #333; padding: 20px; border-radius: 20px; width: 300px; margin: auto; }
-        .btn { background: #222; color: #fff; border: 1px solid #d4af37; padding: 15px; width: 100%; 
-               margin-bottom: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        .btn:hover { background: #d4af37; color: #000; }
+        .card { background: #111; border: 2px solid #333; padding: 25px; border-radius: 20px; width: 320px; margin: auto; }
+        .btn { background: #d4af37; color: #000; border: none; padding: 15px; width: 100%; margin: 10px 0; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
-    <div class="remote">
-        <h2>ريموت كسر الحماية 📺</h2>
-        <button class="btn" onclick="bypass('mbc1')">تشغيل MBC 1</button>
-        <button class="btn" onclick="bypass('mbc_masr')">تشغيل MBC مصر</button>
-        <button class="btn" onclick="bypass('mbc2')">تشغيل MBC 2</button>
-        <p style="font-size: 10px; color: #555;">لو ظهر 204.. المتصفح محتاج تحديث</p>
+    <div class="card">
+        <h2>فك حظر 204 📺</h2>
+        <p style="font-size: 12px; color: #777;">دوس على القناة، ولو فتحت صفحة فاضية اعمل Refresh</p>
+        <button class="btn" onclick="openShield('mbc1')">MBC 1</button>
+        <button class="btn" onclick="openShield('mbc_masr')">MBC مصر</button>
+        <button class="btn" onclick="openShield('mbc2')">MBC 2</button>
     </div>
 
     <script>
-        function bypass(id) {
-            // الرابط اللي بيشغل القناة "بره" الموقع
-            const target = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
+        function openShield(id) {
+            // بنستخدم رابط المشغل الأصلي بس مع حركة صياعة
+            const streamUrl = `https://www.elahmad.com/tv/radiant.php?id=${id}`;
             
-            // هنا السر: بنفتح النافذة وبنمسح الـ "Referrer" تماماً
-            // كأنك فاتح التبويب ده "من الهوا" مش من فيرسيل
-            const win = window.open('', '_blank', 'width=1000,height=600');
-            win.opener = null; // قطع الصلة بموقعك عشان الأحمد ميعرفش أنت جاي منين
-            win.location.replace(target);
+            // 1. بنفتح نافذة جديدة فاضية تماماً
+            const newWin = window.open('', '_blank', 'width=1000,height=650');
+            
+            // 2. بنمسح أي أثر لموقعك (Referrer) عشان الأحمد ميعرفش أنت مين
+            newWin.opener = null; 
+            
+            // 3. بنكتب كود جوه النافذة الجديدة يخليها تطلب الفيديو كأنها صفحة مستقلة
+            const html = `
+                <html>
+                <head><meta name="referrer" content="no-referrer"></head>
+                <body style="margin:0;background:#000;">
+                    <iframe src="${streamUrl}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+                </body>
+                </html>
+            `;
+            newWin.document.write(html);
+            newWin.document.close();
         }
     </script>
 </body>
